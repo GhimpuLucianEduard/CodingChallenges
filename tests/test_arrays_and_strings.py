@@ -51,7 +51,7 @@ class TestUrlify(unittest.TestCase):
         assert urlify('     ') == '%20%20%20%20%20'
 
 
-class TestPalindromePermutation:
+class TestPalindromePermutation(unittest.TestCase):
 
     def test_palindrome_permutation_empty(self):
         assert palindrome_permutation('') == True
@@ -62,6 +62,52 @@ class TestPalindromePermutation:
     def test_palindrome_permutation_false(self):
         assert palindrome_permutation('Tac t Coaa') == False
 
+
+class TestOneWay(unittest.TestCase):
+
+    def test_one_way_remove(self):
+        assert one_way('pale', 'ple') == True
+
+    def test_one_way_insert(self):
+        assert one_way('pale', 'pales') == True
+
+    def test_one_way_replace(self):
+        assert one_way('pale', 'bale') == True
+
+    def test_one_way_false(self):
+        assert one_way('pale', 'bake') == False
+
+    def test_one_way_one_char(self):
+        assert one_way('a', 'ab') == True
+
+    def test_one_way_two_char(self):
+        assert one_way('a', 'abc') == False
+
+    def test_one_way_empty(self):
+        assert one_way('', '') == True
+
+class TestOneWayV2(unittest.TestCase):
+
+    def test_one_way_remove(self):
+        assert one_way_v2('pale', 'ple') == True
+
+    def test_one_way_insert(self):
+        assert one_way_v2('pale', 'pales') == True
+
+    def test_one_way_replace(self):
+        assert one_way_v2('pale', 'bale') == True
+
+    def test_one_way_false(self):
+        assert one_way_v2('pale', 'bake') == False
+
+    def test_one_way_one_char(self):
+        assert one_way_v2('a', 'ab') == True
+
+    def test_one_way_two_char(self):
+        assert one_way_v2('a', 'abc') == False
+
+    def test_one_way_two_empty(self):
+        assert one_way_v2('', '') == True
 
 if __name__ == '__main__':
     unittest.main()

@@ -139,24 +139,130 @@ def palindrome_permutation(string):
     # e.g. asdsa -> a x2, s x2, d x1
 
     counter_dict = {}
+    # convert string to lowercase, should discuss this with tho
+    string = string.lower()
 
     for char in string:
         # ignore spaces
-        if char == '':
+        if char == '' or char == ' ':
             continue
 
         counter_dict[char] = counter_dict.get(char, 0) + 1
 
     found_middle_char = False
     for value in counter_dict.values():
-        if value % 2 == 0:
-            if value == 1:
-                # already found a char with count 1
-                if found_middle_char:
-                    return False
-                else:
-                    found_middle_char = True
+        if value % 2 != 0:
+            # already found a char with odd count
+            if found_middle_char:
+                return False
+            else:
+                found_middle_char = True
+
+    return True
+
+
+def one_way(first, second):
+    """
+    One Away: There are three types of edits that can be performed on strings: insert a character,
+    remove a character, or replace a character. Given two strings, write a function to check if they are
+    one edit (or zero edits) away.
+    EXAMPLE
+    pale, ple -> true
+    pales, pale -> true
+    pale, bale -> true
+    pale, bake -> false
+    :param first: first input string
+    :param second: second input string
+    :return: True if the strings are one edit away, False otherwise
+    """
+
+    # The 3 operations can be check based on the length of the string
+    # l1 > l2 -> insert
+    # l2 < l1 -> remove
+    # l1 = l2 -> replace
+    # also insert and remove can be checked with the same method
+    # just swamp the params
+
+    if len(first) == len(second):
+        return check_replace(first, second)
+    elif len(first) - 1 == len(second):
+        return check_insert_or_remove(first, second)
+    elif len(first) == len(second) - 1:
+        return check_insert_or_remove(second, first)
+    else:
+        return False
+
+
+def check_replace(first, second):
+    """
+    Utility function used to check the replace case for `one_way(first, second)`
+    :param first: first input string
+    :param second: second input string
+    :return: True if second had exactly one char replaced based of first, False otherwhise
+    """
+    # utility flag used to keep track fi there is one replacement
+    has_one_replace = False
+    for i in range(0, len(first)):
+        if first[i] != second[i]:
+            if has_one_replace:
+                return False
+            else:
+                has_one_replace = True
+    return True
+
+
+def check_insert_or_remove(first, second):
+    """
+    Utility function used to check insert/remove cases for `one_way(first, second)`
+    len(first) > len(second) !!!
+    :param first: first input string, the one with longer len
+    :param second: second input string, the smaller one
+    :return: True if a single insert/remove operation make the string different, else otherwise
+    """
+
+    found_one_different = False
+    i = 0
+    j = 0
+    while i < len(second):
+        if first[j] == second[i]:
+            j += 1
+            i += 1
         else:
-            return False
+            if not found_one_different:
+                found_one_different = True
+                j += 1
+            else:
+                return False
+
+    return True
+
+
+def one_way_v2(first, second):
+    """
+    Same as one_way(first, second), but this time we'll try a single
+    function for all 3 edit actions
+    """
+
+    if abs(len(first) - len(second)) > 1:
+        return False
+
+    # we still need to check which string has a longer length
+    if len(second) > len(first):
+        first, second = second, first
+
+    found_one_different = False
+    i = 0
+    j = 0
+    while i < len(second):
+        if first[j] != second[i]:
+            if found_one_different:
+                return False
+            else:
+                found_one_different = True
+                if len(first) == len(second):
+                    i += 1
+        else:
+            i += 1
+        j += 1
 
     return True
