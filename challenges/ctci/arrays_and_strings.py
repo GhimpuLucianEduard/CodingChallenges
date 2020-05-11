@@ -266,3 +266,67 @@ def one_way_v2(first, second):
         j += 1
 
     return True
+
+
+def string_compression(string):
+    """
+    Implement a method to perform basic string compression using the counts
+    of repeated characters. For example, the string aabcccccaaa would become a2b1c5a3, If the
+    "compressed" string would not become smaller than the original string, your method should return
+    the original string. You can assume the string has only uppercase and lowercase letters (a - z).
+    :param string: input string
+    :return: compressed string
+    """
+
+    # the catch here is stat using normal string append "+=" in python case
+    # is very expensive so you should use other approach such as StringBuilder in Java
+    # in python case we will use "".join() to simulate the string builder
+    compressed = ''
+    counter = 1
+    for i in range(0, len(string)):
+        if i < len(string) - 1 and string[i] == string[i + 1]:
+            counter += 1
+        else:
+            compressed = ''.join([compressed, string[i], str(counter)])
+            counter = 1
+
+    return compressed
+
+
+def rotate_matrix(matrix):
+    """
+    Rotate Matrix: Given an image represented by an NxN matrix, where each pixel in the image is 4
+    bytes, write a method to rotate the image by 90 degrees. Can you do this in place?
+    :param matrix: input matrix
+    :return: matrix rotate 90 degrees clockwise
+    ex:
+    1 2 3    7 4 1
+    4 5 6 -> 8 5 2
+    7 8 9    9 6 3
+    """
+
+    # We will do this in 2 steps
+
+    # First we create Matrix^t with is the transpose matrix
+    # 1 2 3    1 4 7
+    # 4 5 6 -> 2 5 8
+    # 7 8 9    3 6 9
+
+    for i in range(0, len(matrix)):
+        for j in range(i, len(matrix)):
+            temp = matrix[i][j]
+            matrix[i][j] = matrix[j][i]
+            matrix[j][i] = temp
+
+    # Now what's left is to reverse each row
+    # 1 4 7    7 4 1
+    # 2 5 8 -> 8 5 2
+    # 3 6 9    9 6 3
+    half_point = int(len(matrix) / 2)
+    for i in range(0, len(matrix)):
+        for j in range(0, half_point):
+            temp = matrix[i][j]
+            matrix[i][j] = matrix[i][len(matrix) - j - 1]
+            matrix[i][len(matrix) - j - 1] = temp
+
+    return matrix
