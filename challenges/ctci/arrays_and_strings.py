@@ -330,3 +330,89 @@ def rotate_matrix(matrix):
             matrix[i][len(matrix) - j - 1] = temp
 
     return matrix
+
+
+def zero_matrix(matrix):
+    """
+    Write an algorithm such that if an element in an MxN matrix is 0,
+    its entire row and column are set to 0
+    :param matrix: input matrix
+    :return: result matrix
+    """
+
+    # we will iterate the matrix and mark all rows and columns that have at least a 0
+    zero_rows = set()
+    zero_cols = set()
+
+    for i in range(0, len(matrix)):
+        for j in range(0, len(matrix[0])):
+            if matrix[i][j] == 0:
+                zero_rows.add(i)
+                zero_cols.add(j)
+
+    for i in range(0, len(matrix)):
+        if i in zero_rows:
+            for j in range(0, len(matrix[0])):
+                matrix[i][j] = 0
+
+    for j in range(0, len(matrix[0])):
+        if j in zero_cols:
+            for i in range(0, len(matrix)):
+                matrix[i][j] = 0
+
+    return matrix
+
+
+def zero_matrix_o1_space(matrix):
+    """
+    Write an algorithm such that if an element in an MxN matrix is 0,
+    its entire row and column are set to 0
+    :param matrix: input matrix
+    :return: result matrix
+    Same as zero_matrix, but now we will use the first row and first column
+    of the matrix to reduce space usage
+    """
+
+    # flag to keep track if the first row and col have zero values
+    first_row_zero = False
+    first_col_zero = False
+
+    # check if first row has 0
+    for i in range(0, len(matrix)):
+        if matrix[i][0] == 0:
+            first_col_zero = True
+
+    # check if first col has 0
+    for j in range(0, len(matrix[0])):
+        if matrix[0][j] == 0:
+            first_row_zero = True
+
+    # save zero for the rest of the matrix
+    for i in range(1, len(matrix)):
+        for j in range(1, len(matrix[0])):
+            if matrix[i][j] == 0:
+                matrix[i][0] = 0
+                matrix[0][j] = 0
+
+    # change rows
+    for i in range(1, len(matrix)):
+        if matrix[i][0] == 0:
+            for j in range(0, len(matrix[0])):
+                matrix[i][j] = 0
+
+    # change cols
+    for j in range(1, len(matrix[0])):
+        if matrix[0][j] == 0:
+            for i in range(0, len(matrix)):
+                matrix[i][j] = 0
+
+    # also need to check if the first row and col need to be changed
+    if first_col_zero:
+        for i in range(0, len(matrix)):
+            matrix[i][0] = 0
+
+    if first_row_zero:
+        for j in range(0, len(matrix[0])):
+            matrix[0][j] = 0
+
+    return matrix

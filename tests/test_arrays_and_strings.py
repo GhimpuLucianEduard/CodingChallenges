@@ -143,5 +143,52 @@ class TestRotateMatrix(unittest.TestCase):
         matrix = [[1]]
         assert rotate_matrix(matrix) == [[1]]
 
+
+class TestZeroMatrix(unittest.TestCase):
+
+    def test_zero_matrix(self):
+        matrix = [[1, 0, 3], [4, 5, 0], [7, 8, 9]]
+        assert zero_matrix(matrix) == [[0, 0, 0], [0, 0, 0], [7, 0, 0]]
+
+    def test_zero_matrix_mn(self):
+        matrix = [[1, 0, 3, 4], [4, 5, 0, 9], [7, 8, 9, 12]]
+        assert zero_matrix(matrix) == [[0, 0, 0, 0], [0, 0, 0, 0], [7, 0, 0, 12]]
+
+    def test_zero_matrix_one_col(self):
+        matrix = [[1], [0], [2], [4], [4]]
+        assert zero_matrix(matrix) == [[0], [0], [0], [0], [0]]
+
+    def test_zero_matrix_one_row(self):
+        matrix = [[1, 2, 3, 0]]
+        assert zero_matrix(matrix) == [[0, 0, 0, 0]]
+
+    def test_zero_matrix_no_zero(self):
+        matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        assert zero_matrix(matrix) == [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+
+class TestZeroMatrixO1Space(unittest.TestCase):
+
+    def test_zero_o1_space_matrix(self):
+        matrix = [[1, 0, 3], [4, 5, 0], [7, 8, 9]]
+        assert zero_matrix_o1_space(matrix) == [[0, 0, 0], [0, 0, 0], [7, 0, 0]]
+
+    def test_zero_matrix_o1_space_mn(self):
+        matrix = [[1, 0, 3, 4], [4, 5, 0, 9], [7, 8, 9, 12]]
+        assert zero_matrix_o1_space(matrix) == [[0, 0, 0, 0], [0, 0, 0, 0], [7, 0, 0, 12]]
+
+    def test_zero_matrix_o1_space_one_col(self):
+        matrix = [[1], [0], [2], [4], [4]]
+        assert zero_matrix_o1_space(matrix) == [[0], [0], [0], [0], [0]]
+
+    def test_zero_matrix_o1_space_one_row(self):
+        matrix = [[1, 2, 3, 0]]
+        assert zero_matrix_o1_space(matrix) == [[0, 0, 0, 0]]
+
+    def test_zero_matrix_o1_space_no_zero(self):
+        matrix = [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+        assert zero_matrix_o1_space(matrix) == [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
+
+
 if __name__ == '__main__':
     unittest.main()
