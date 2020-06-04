@@ -190,5 +190,20 @@ class TestZeroMatrixO1Space(unittest.TestCase):
         assert zero_matrix_o1_space(matrix) == [[1, 2, 3], [4, 5, 6], [7, 8, 9]]
 
 
+class TestStringRotation(unittest.TestCase):
+
+    def test_string_rotation_true(self):
+        assert string_rotation('waterbottle', 'erbottlewat') == True
+
+    def test_string_rotation_false(self):
+        assert string_rotation('waterbottle', 'erbottletaw') == False
+
+    def test_string_rotation_empty(self):
+        assert string_rotation('', '') == True
+
+    def test_string_rotation_single(self):
+        assert string_rotation('a', 'a') == True
+
+
 if __name__ == '__main__':
     unittest.main()

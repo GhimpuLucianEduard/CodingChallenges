@@ -1,3 +1,5 @@
+import math
+
 def unique_characters(string):
     """
     Implement an algorithm to determine if a string
@@ -416,3 +418,25 @@ def zero_matrix_o1_space(matrix):
             matrix[0][j] = 0
 
     return matrix
+
+
+def string_rotation(first, second):
+    """
+    Assume you have a method isSubstring which checks if one word is a substring
+    of another. Given two strings, si and s2, write code to check if s2 is a rotation of si using only one
+    call to isSubstring (e.g.,"waterbottle" is a rotation of "erbottlewat").
+    :param first: first input string
+    :param second: second input string
+    :return: true if second is a rotation of first, false otherwise
+    """
+
+    # the trick here is to see that if you combine the first string twice
+    # the result string s1s1 will contain all the possible rotation for the string s1
+    # so substring(s1s1, s2) it's the actual solution
+
+    if len(first) != len(second):
+        return False
+
+    first_dup = first + first
+
+    return second in first_dup
