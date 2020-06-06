@@ -311,3 +311,142 @@ class SortingStack(Stack):
 
     def is_empty(self):
         return self.last is None
+
+
+def sort_stack(stack):
+    """
+    Write a program to sort a stack such that the smallest items are on the top. You can use
+    an additional temporary stack, but you may not copy the elements into any other data structure
+    (such as an array). The stack supports the following operations: push, pop, peek, and is Empty.
+    :param stack: input stack
+    :return: sorted stack
+
+    We will use a deque to simulate a stack
+    """
+
+    # base case
+    if len(stack) <= 1:
+        return stack
+
+    # used to shift elements from the main stack
+    aux_stack = deque()
+
+    # sort the main stack while we still have elements
+    while len(stack) != 0:
+
+        aux_node = stack.pop()
+        while len(aux_stack) != 0 and aux_node < aux_stack[-1]:
+            stack.append(aux_stack.pop())
+
+        aux_stack.append(aux_node)
+
+    # move back the sorted elements to the main stack
+    while len(aux_stack) != 0:
+        stack.append(aux_stack.pop())
+
+    return stack
+
+
+class AnimalSortedLinkedList:
+    """
+    Sorted linked list used to store Animals
+    The sort order is given by the animal timestamp
+    """
+
+    def __init__(self):
+        self.first = None
+
+    def add(self, data):
+        node = Node(data)
+
+        # list empty, add as first
+        if self.first is None:
+            self.first = node
+            return
+
+        # special case, replace the head of the list
+        if data.timestamp < self.first.data.timestamp:
+            node.next = self.first
+            self.first = node
+            return
+
+        # loop the list and find the right spot for the new node
+        current_node = self.first
+        while current_node.next is not None and current_node.next.data.timestamp < data.timestamp:
+            current_node = current_node.next
+
+        node.next = current_node.next
+        current_node.next = node
+
+    def remove_first(self):
+        if self.first is None:
+            raise Exception("List empty")
+
+        aux = self.first
+        self.first = self.first.next
+        return aux
+
+    def __len__(self):
+        if self.first is None:
+            return 0
+
+        current_node = self.first
+        size = 0
+        while current_node is not None:
+            current_node = current_node.next
+            size += 1
+
+        return size
+
+
+class Animal:
+    def __init__(self, name, timestamp):
+        self.name = name
+        self.timestamp = timestamp
+
+
+class Dog(Animal):
+    def __init__(self, name, timestamp):
+        super().__init__(name, timestamp)
+
+
+class Cat(Animal):
+    def __init__(self, name, timestamp):
+        super().__init__(name, timestamp)
+
+
+class AnimalShelter:
+    """
+    An animal shelter, which holds only dogs and cats, operates on a strictly"first in, first
+    out" basis. People must adopt either the "oldest" (based on arrival time) of all animals at the shelter,
+    or they can select whether they would prefer a dog or a cat (and will receive the oldest animal of
+    that type). They cannot select which specific animal they would like. Create the data structures to
+    maintain this system and implement operations such as enqueue, dequeueAny, dequeueDog,
+    and dequeueCat. You may use the built in LinkedList data structure.
+
+    We will use 2 LinkedLists to manage a list of dogs and a list of cats
+    both linked list will be sorted by their timestamp, therefore pop actions will always return the right animal
+    """
+
+    def __init__(self):
+        self.dogs_list = AnimalSortedLinkedList()
+        self.cats_list = AnimalSortedLinkedList()
+
+    def enqueue(self, new_entry):
+        if type(new_entry) is Dog:
+            self.dogs_list.add(new_entry)
+        else:
+            self.cats_list.add(new_entry)
+
+    def dequeue_dog(self):
+        return self.dogs_list.remove_first()
+
+    def dequeue_cat(self):
+        return self.cats_list.remove_first()
+
+    def dequeue_any(self):
+        # check which animal should be removed from both lists
+        if self.dogs_list.first.data.timestamp < self.cats_list.first.data.timestamp:
+            return self.dequeue_dog()
+        else:
+            return self.dequeue_cat()

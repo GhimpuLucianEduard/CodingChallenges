@@ -274,5 +274,124 @@ class TestSortingStack(unittest.TestCase):
         with self.assertRaises(Exception):
             self.stack.peek()
 
+
+class TestSortStack(unittest.TestCase):
+
+    def test_sort_stack_empty(self):
+        stack = deque()
+        stack = sort_stack(stack)
+        self.assertEqual(len(stack), 0)
+
+    def test_sort_stack_one_element(self):
+        stack = deque()
+        stack.append(10)
+        stack = sort_stack(stack)
+        self.assertEqual(len(stack), 1)
+
+    def test_sort_stack_multiple_elements(self):
+        stack = deque()
+        stack.append(2)
+        stack.append(7)
+        stack.append(4)
+        stack.append(1)
+        stack = sort_stack(stack)
+        self.assertEqual(len(stack), 4)
+        self.assertEqual(stack[0], 7)
+        self.assertEqual(stack[1], 4)
+        self.assertEqual(stack[2], 2)
+        self.assertEqual(stack[3], 1)
+
+    def test_sort_stack_multiple_elements_sorted(self):
+        stack = deque()
+        stack.append(4)
+        stack.append(3)
+        stack.append(2)
+        stack.append(1)
+        stack = sort_stack(stack)
+        self.assertEqual(len(stack), 4)
+        self.assertEqual(stack[0], 4)
+        self.assertEqual(stack[1], 3)
+        self.assertEqual(stack[2], 2)
+        self.assertEqual(stack[3], 1)
+
+    def test_sort_stack_multiple_elements_sorted_reverse(self):
+        stack = deque()
+        for i in range(0, 19):
+            stack.append(i)
+        stack = sort_stack(stack)
+        self.assertEqual(len(stack), 19)
+        self.assertEqual(stack[0], 18)
+        self.assertEqual(stack[7], 11)
+        self.assertEqual(stack[18], 0)
+
+
+class TestAnimalShelter(unittest.TestCase):
+
+    def setUp(self):
+        self.animal_shelter = AnimalShelter()
+
+    def test_enqueue_empty(self):
+        self.animal_shelter.enqueue(Dog("dog1", 1))
+        self.assertEqual(len(self.animal_shelter.dogs_list), 1)
+        self.assertEqual(len(self.animal_shelter.cats_list), 0)
+
+    def test_enqueue_multiple(self):
+        self.animal_shelter.enqueue(Dog("dog1", 4))
+        self.animal_shelter.enqueue(Dog("dog2", 1))
+        self.animal_shelter.enqueue(Dog("dog3", 7))
+        self.assertEqual(len(self.animal_shelter.dogs_list), 3)
+        self.assertEqual(self.animal_shelter.dogs_list.first.data.timestamp, 1)
+
+        self.animal_shelter.enqueue(Cat("cat1", 17))
+        self.animal_shelter.enqueue(Cat("cat2", 11))
+        self.animal_shelter.enqueue(Cat("cat3", 5))
+        self.animal_shelter.enqueue(Cat("cat4", 12))
+        self.animal_shelter.enqueue(Cat("cat5", 11))
+
+        self.assertEqual(len(self.animal_shelter.cats_list), 5)
+        self.assertEqual(self.animal_shelter.cats_list.first.data.timestamp, 5)
+
+    def test_enqueue_dequeue_dog(self):
+        self.animal_shelter.enqueue(Dog("dog1", 4))
+        self.animal_shelter.enqueue(Dog("dog2", 1))
+        self.animal_shelter.enqueue(Dog("dog3", 7))
+        self.assertEqual(len(self.animal_shelter.dogs_list), 3)
+        self.assertEqual(self.animal_shelter.dequeue_dog().data.name, "dog2")
+        self.assertEqual(len(self.animal_shelter.dogs_list), 2)
+
+    def test_enqueue_dequeue_cat(self):
+        self.animal_shelter.enqueue(Cat("cat1", 17))
+        self.animal_shelter.enqueue(Cat("cat2", 11))
+        self.animal_shelter.enqueue(Cat("cat3", 5))
+        self.assertEqual(len(self.animal_shelter.cats_list), 3)
+        self.assertEqual(self.animal_shelter.dequeue_cat().data.name, "cat3")
+        self.assertEqual(len(self.animal_shelter.cats_list), 2)
+
+    def test_enqueue_dequeue_any(self):
+        self.animal_shelter.enqueue(Dog("dog1", 4))
+        self.animal_shelter.enqueue(Dog("dog2", 1))
+        self.animal_shelter.enqueue(Dog("dog3", 7))
+        self.assertEqual(len(self.animal_shelter.dogs_list), 3)
+        self.animal_shelter.enqueue(Cat("cat1", 17))
+        self.animal_shelter.enqueue(Cat("cat2", 11))
+        self.animal_shelter.enqueue(Cat("cat3", 5))
+        self.assertEqual(len(self.animal_shelter.cats_list), 3)
+        self.assertEqual(self.animal_shelter.dequeue_any().data.name, "dog2")
+        self.assertEqual(self.animal_shelter.dequeue_any().data.name, "dog1")
+        self.assertEqual(self.animal_shelter.dequeue_any().data.name, "cat3")
+
+    def test_dequeue_dog_empty(self):
+        with self.assertRaises(Exception):
+            self.animal_shelter.dequeue_dog()
+
+    def test_dequeue_cat_empty(self):
+        with self.assertRaises(Exception):
+            self.animal_shelter.dequeue_cat()
+
+    def test_dequeue_any_empty(self):
+        with self.assertRaises(Exception):
+            self.animal_shelter.dequeue_any()
+
+
 if __name__ == '__main__':
     unittest.main()
