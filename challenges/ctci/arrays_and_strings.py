@@ -1,5 +1,3 @@
-import math
-
 def unique_characters(string):
     """
     Implement an algorithm to determine if a string
