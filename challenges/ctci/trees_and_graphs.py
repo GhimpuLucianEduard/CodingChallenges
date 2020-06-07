@@ -1,5 +1,6 @@
 import math
-from collections import defaultdict, deque
+from collections import *
+from datastructures.linked_list import *
 
 
 class GraphNode:
@@ -18,6 +19,48 @@ class TreeNode:
         self.value = value
         self.left = None
         self.right = None
+
+
+class BinaryTree:
+    def __init__(self):
+        self.root = None
+
+    def insert(self, value):
+        new_node = TreeNode(value)
+
+        current_node = self.root
+        if current_node is None:
+            self.root = new_node
+            return self.root
+
+        queue = [self.root]
+
+        while len(queue) > 0:
+            current = queue.pop(0)
+            if current.left is None:
+                current.left = new_node
+                return new_node
+
+            if current.right is None:
+                current.right = new_node
+                return new_node
+
+            queue.append(current.left)
+            queue.append(current.right)
+
+
+def create_bt_from_array(array):
+    """
+    Not in the book, used for testing
+    :param array: input array
+    :return: root node of the tree
+    """
+    tree = BinaryTree()
+
+    for element in array:
+        tree.insert(element)
+
+    return tree
 
 
 def route_between_nodes_dfs(node_a, node_b):
@@ -131,8 +174,120 @@ def minimal_tree(array):
 
     root_index = math.trunc(len(array) / 2)
     left_child = minimal_tree(array[:root_index])
-    right_child = minimal_tree(array[root_index+1:])
+    right_child = minimal_tree(array[root_index + 1:])
     node = TreeNode(array[root_index])
     node.left = left_child
     node.right = right_child
     return node
+
+
+def list_of_depths_aux(node, lists, level):
+    lists[level].append_to_end(node.value)
+    if node.left:
+        list_of_depths_aux(node.left, lists, level + 1)
+    if node.right:
+        list_of_depths_aux(node.right, lists, level + 1)
+
+
+def list_of_depths(root):
+    """
+    List of Depths: Given a binary tree, design an algorithm which
+    creates a linked list of all the nodes
+    at each depth (e.g., if you have a tree with depth D, you'll have D linked lists).
+    :param root: input tree
+    :return: list of lists for each level
+    """
+
+    if root is None:
+        return {}
+
+    lists = defaultdict(LinkedList)
+    list_of_depths_aux(root, lists, 0)
+    return lists
+
+
+def check_balanced_aux(root):
+    if root is None:
+        return -1
+
+    left_height = check_balanced_aux(root.left)
+    if left_height is float('-inf'):
+        return float('-inf')
+
+    right_height = check_balanced_aux(root.right)
+    if right_height is float('-inf'):
+        return float('-inf')
+
+    diff = left_height - right_height
+    if abs(diff) > 1:
+        return float('-inf')
+    else:
+        return max(left_height, right_height) + 1
+
+
+def check_balanced(root):
+    """
+    Implement a function to check if a binary tree is balanced. For the purposes of
+    this question, a balanced tree is defined to be a tree such that
+    the heights of the two subtrees of any node never differ by more than one.
+    :param root: input tree
+    :return: True if the tree is balanced, false otherwise
+    """
+    return check_balanced_aux(root) != float('-inf')
+
+
+def validate_bst_aux(root, min, max):
+    if root is None:
+        return True
+
+    if (min is not None and root.value <= min) or (max is not None and root.value > max):
+        return False
+
+    if not validate_bst_aux(root.left, min, root.value) or not validate_bst_aux(root.right, root.value, max):
+        return False
+
+    return True
+
+
+def validate_bst(root):
+    """
+    Implement a function to check if a binary tree is a binary search tree.
+    :param root: input tree
+    :return: True if tree is bst, false otherwise
+    """
+    return validate_bst_aux(root, None, None)
+
+
+class TreeNodeWithParent(TreeNode):
+    def __init__(self, value, parent=None):
+        super().__init__(value)
+        self.parent = parent
+
+
+def successor(node):
+    """
+    Write an algorithm to find the "next" node (i.e., in-order successor) of a given node in a
+    binary search tree. You may assume that each node has a link to its parent.
+    :param node: input node
+    :return: next successor for input node
+    """
+
+    # base case, single node
+    if node is None:
+        return None
+
+    # node has a right child
+    if node.right:
+        child = node.right
+        while child.left:
+            child = child.left
+        return child
+
+    current = node
+    parent = node.parent
+    if parent:
+        while parent.parent and parent.left != current:
+            current = parent
+            parent = current.parent
+
+    return parent
