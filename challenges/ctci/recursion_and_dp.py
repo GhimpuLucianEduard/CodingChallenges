@@ -85,3 +85,104 @@ def robot_in_a_grid_aux(grid, row, col, path, cache):
 
     cache[(row, col)] = False
     return False
+
+
+def magic_index(array):
+    """
+    A magic index in an array A [ 0 ••• n -1] is
+    defined to be an index such that A[ i] = i.
+    Given a sorted array of distinct integers, write a
+    method to find a magic index, if one exists, in array A.
+    :param array: input array
+    :return: The magic index if exits, -1 otherwise
+    """
+    if len(array) == 0:
+        return -1
+
+    return magic_index_aux(array, 0, len(array) - 1)
+
+
+def magic_index_aux(array, i, j):
+    # base case
+    if i == j and array[i] != i:
+        return -1
+
+    mid_index = (i + j) // 2
+    if array[mid_index] == mid_index:
+        return mid_index
+
+    if array[mid_index] > mid_index:
+        # search in the left side
+        return magic_index_aux(array, i, mid_index - 1)
+    else:
+        # search in the right side
+        return magic_index_aux(array, mid_index + 1, j)
+
+
+def magic_index_followup(array):
+    """
+    A magic index in an array A [ 0 ••• n -1] is
+    defined to be an index such that A[ i] = i.
+    Given a sorted array of distinct integers, write a
+    method to find a magic index, if one exists, in array A.
+    FOLLOW UP
+    What if the values are not distinct?
+    :param array: input array
+    :return: The magic index if exits, -1 otherwise
+    """
+    if len(array) == 0:
+        return -1
+
+    return magic_index_followup_aux(array, 0, len(array) - 1)
+
+
+def magic_index_followup_aux(array, i, j):
+    # base case
+    if i > j:
+        return -1
+
+    mid_index = (i + j) // 2
+    if array[mid_index] == mid_index:
+        return mid_index
+
+    left_result = magic_index_followup_aux(array, i, mid_index - 1)
+    if left_result != -1:
+        return left_result
+
+    right_result = magic_index_followup_aux(array, mid_index + 1, j)
+    if right_result != -1:
+        return right_result
+
+    return -1
+
+
+def power_set(input_set):
+    """
+    Write a method to return all subsets of a set
+    :param input_set: Input set
+    :return: All subsets of input set
+    """
+
+    if len(input_set) == 0:
+        return []
+
+    return power_set_aux(input_set, len(input_set) - 1)
+
+
+def power_set_aux(input_set, index):
+    subsets = []
+
+    if index == -1:
+        subsets.append([])
+        return subsets
+
+    subsets = power_set_aux(input_set, index - 1)
+    new_subsets = []
+    for sub_set in subsets:
+        copy = sub_set.copy()
+        copy.append(input_set[index])
+        new_subsets.append(copy)
+
+    subsets.extend(new_subsets)
+
+    return subsets
