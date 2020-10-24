@@ -1,29 +1,24 @@
+"""
+560. Subarray Sum Equals K
+
+Given an array of integers and an integer k,
+you need to find the total number of continuous subarrays whose sum equals to k.
+
+Example:
+
+Input: nums = [1,1,1], k = 2
+Output: 2
+
+Constraints:
+
+The length of the array is in range [1, 20,000].
+The range of numbers in the array is [-1000, 1000] and the range of the integer k is [-1e7, 1e7].
+"""
 import unittest
 from collections import defaultdict
 
 
 def subarray_sum_equals_k(array, k):
-    """
-    560. Subarray Sum Equals K
-
-    Given an array of integers and an integer k,
-    you need to find the total number of continuous subarrays whose sum equals to k.
-
-    Example:
-
-    Input: nums = [1,1,1], k = 2
-    Output: 2
-
-    Constraints:
-
-    The length of the array is in range [1, 20,000].
-    The range of numbers in the array is [-1000, 1000] and the range of the integer k is [-1e7, 1e7].
-
-    :param array: input array
-    :param k: input k
-    :return: total numbers of subarrays with sum equal to k
-    """
-
     sums = defaultdict(int)
     sums[0] = 1
     total_sum = 0
